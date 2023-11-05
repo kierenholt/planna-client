@@ -23,7 +23,7 @@ function App() {
   const [open, setOpen] = React.useState(true);
 
   let [accessToken, setAccessToken] = useState<JWT | null>(getAccessTokenFromStorage());
-  let [userId, setUserId] = useState<string>("G"+accessToken?.sub);
+  let [userId, setUserId] = useState<string>(accessToken ? "G"+accessToken?.sub : "");
 
   let [selectedClass, setSelectedClass] = useState<Clas | null>(null);
   let [classes, setClasses] = useState<Clas[]>([]);
@@ -32,17 +32,17 @@ function App() {
 
 
   useEffect(() => {
-      APIService.getClassesOfUser(userId)
-          .then(items => {
-              setClasses(items)
+      if (userId) APIService.getClassesOfUser(userId)
+          .then((items: Clas[]) => {
+              if (items) setClasses(items)
           });
       }, [userId]);
 
   useEffect(() => {
     if (selectedClass) {
-      APIService.getTopicsOfClass(selectedClass._id)
-        .then(items => {
-          setTopics(items)
+      APIService.getTopicNamesOfClass(selectedClass._id)
+        .then((items: Topic[]) => {
+          if (items) setTopics(items)
         });
     }
   }, [selectedClass])
@@ -101,7 +101,8 @@ function App() {
               <ModalClose />
                 <ClassesList setSelectedClass={setSelectedClass}
                   selectedClass={selectedClass} classes={classes}>
-                  <CreateClassButton userId={userId} setClasses={setClasses} classes={classes} />
+                  <CreateClassButton userId={userId} setClasses={setClasses} 
+                  classes={classes} setSelectedClas={setSelectedClass}/>
                 </ClassesList>
             </Drawer>
 

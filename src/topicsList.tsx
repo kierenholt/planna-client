@@ -1,9 +1,5 @@
-import { Add } from "@mui/icons-material"
 import { Box, Button, DialogTitle, Modal, Stack } from "@mui/joy"
-import { useEffect, useState } from "react";
 import { Clas, Topic } from "./interfaces";
-import { APIService } from "./APIService";
-import { CreateTopicButton } from "./createTopicButton";
 
 interface TopicsListProps {
     setSelectedTopic: (t: Topic) => void;

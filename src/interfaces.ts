@@ -1,11 +1,11 @@
-export interface User extends Document {
+export interface User {
     _id: string; //GXXX for google
     name: string;
     email: string;
     picture?: string;
 }
 
-export interface Clas extends Document {
+export interface Clas {
     _id: string;
     name: string;
     settings: string;
@@ -35,7 +35,7 @@ export interface Lesson {
 }
 
 
-export interface Row extends Document {
+export interface Row {
     _id: string;
     comment: string;
     title: string;
