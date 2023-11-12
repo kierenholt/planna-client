@@ -1,19 +1,19 @@
 import { Add } from "@mui/icons-material";
-import { Box, Button, FormHelperText, FormLabel, Input, Modal, Typography } from "@mui/joy";
+import { Box, Button, Card, FormHelperText, FormLabel, Input, Modal, Typography } from "@mui/joy";
 import { useState } from "react";
 import { Clas, Topic } from "./interfaces";
 import { FieldErrors, FieldValues, useForm } from "react-hook-form";
 import { APIService } from "./APIService";
 import { ClasFactory } from "./factory";
 
-interface CreateClassButtonProps {
+interface CreateClassCardProps {
   userId: string;
   setClasses: (c: Clas[]) => void;
   classes: Clas[];
   setSelectedClas: (c: Clas) => void;
 }
 
-export function CreateClassButton(props: CreateClassButtonProps) {
+export function CreateClassCard(props: CreateClassCardProps) {
 
   const [open, setOpen] = useState(false);
   const handleOpen = () => setOpen(true);
@@ -52,11 +52,13 @@ export function CreateClassButton(props: CreateClassButtonProps) {
 
   return (
     <div>
-      <Button
-        onClick={handleOpen}
-        startDecorator={<Add />}>
-        New Class
-      </Button>
+      <Card sx={{margin:"20px", width: 275, }}>
+        <Button
+          onClick={handleOpen}
+          startDecorator={<Add />}>
+          New Class
+        </Button>
+      </Card>
       <Modal
         open={open}
         onClose={handleClose}

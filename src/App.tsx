@@ -9,14 +9,14 @@ import { Box, Button, DialogTitle, Drawer, IconButton, Stack, Tab, TabList, TabP
 import ModalClose from '@mui/joy/ModalClose';
 import MenuIcon from '@mui/icons-material/Menu';
 import { APIService } from './APIService';
-import { ClassesList } from './classesList';
+import { ClassesCardList } from './classesList';
 import { Clas, Topic } from './interfaces';
 
 import { AssignedWorkPanel } from './assignedWorkPanel';
 import { PeoplePanel } from './peoplePanel';
 import { TopicsList } from './topicsList';
 import { CreateTopicButton } from './createTopicButton';
-import { CreateClassButton } from './createClassButton';
+import { CreateClassCard } from './createClassButton';
 
 function App() {
   const KEY_FOR_GOOGLE_ACCESS_TOKEN = "googleAccessToken";
@@ -86,43 +86,47 @@ function App() {
       <GoogleOAuthProvider clientId={process.env.REACT_APP_GOOGLE_CLIENT_ID as string}>
         {accessToken ?
           <div>
+
+            {/* TOP ROW */}
             <Stack direction="row" spacing={1} justifyContent='space-between'>
-              <Box>
-                <IconButton color="neutral" onClick={() => setOpen(true)} size='lg'>
-                  <MenuIcon />
-                </IconButton>
-              </Box>
               <Stack style={{ padding: "20px" }} direction="row" justifyContent="flex-end" alignItems="center" spacing={2} >
                 <AccountMenu accessToken={accessToken} logoutHandler={logout} />
               </Stack>
             </Stack>
 
-            <Drawer open={open} onClose={() => setOpen(false)} >
-              <ModalClose />
-                <ClassesList setSelectedClass={setSelectedClass}
-                  selectedClass={selectedClass} classes={classes}>
-                  <CreateClassButton userId={userId} setClasses={setClasses} 
-                  classes={classes} setSelectedClas={setSelectedClass}/>
-                </ClassesList>
-            </Drawer>
+            {/* CLASS LIST DRAWER */}
+            <ClassesCardList handleClick={setSelectedClass}
+                classes={classes}>
+              <CreateClassCard userId={userId} setClasses={setClasses} 
+                classes={classes} setSelectedClas={setSelectedClass}/>
+            </ClassesCardList>
 
+            {/* TABS */}
             <Tabs>
               <TabList>
                 <Tab>Scheme of work</Tab>
                 <Tab>Assigned work</Tab>
                 <Tab>People</Tab>
               </TabList>
+
+              
+            {/* TOPIC LIST CONTAINER */}
               <TabPanel value={0}>
                 {selectedClass ? 
                 <div>
+                {/* TOPIC TOOLBAR */}
                 <Stack direction="row">
-                  <CreateTopicButton clasId={selectedClass._id} setTopics={setTopics} topics={topics} />
+                  <CreateTopicButton clasId={selectedClass._id} setTopics={setTopics} 
+                    topics={topics} />
                 </Stack>
-                <TopicsList selectedTopic={selectedTopic} setSelectedTopic={setSelectedTopic} topics={topics} />
+                {/* TOPIC LIST */}
+                <TopicsList selectedTopic={selectedTopic} setSelectedTopic={setSelectedTopic} 
+                  topics={topics} />
                 </div>
                 : <></>}
-
               </TabPanel>
+              
+              {/* ASSIGNED WORK */}
               <TabPanel value={1}>
                 <AssignedWorkPanel />
               </TabPanel>
