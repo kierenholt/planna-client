@@ -1,5 +1,5 @@
 import { JWT } from "./accessToken";
-import { Clas, Lesson, Topic } from "./interfaces";
+import { Clas, Lesson, Row, Task, Topic } from "./interfaces";
 
 
 export class APIService {
@@ -104,14 +104,13 @@ export class APIService {
     //7 create library topics - not used by client
 
     //8 create new topic in clas
-    static async createNewTopic(name: string, classId: string, lessons: Lesson[] = []): Promise<Topic> {
+    static async createNewTopic(name: string, classId: string): Promise<Topic> {
         try {
             return fetch(process.env.REACT_APP_API_DOMAIN + `/v1/topics`, {
                 method: 'post', mode: 'cors', headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(
                     {
                         name: name,
-                        lessons: lessons,
                         clas: classId
                     })
                 
@@ -119,8 +118,72 @@ export class APIService {
                 .then(response => response.json());
         }
         catch {
-            throw("error in createNewTopicInClass");
+            throw("error in createNewTopic");
         }
     }
 
+    //9 get lesson names
+    static async getLessonNamesOfTopic(topicId: string): Promise<Lesson[]> {
+        try {
+            return fetch(process.env.REACT_APP_API_DOMAIN + `/v1/lessons/topic/${topicId}?name`, {
+                method: 'get', mode: 'cors', headers: { 'Content-Type': 'application/json' },
+            })
+                .then(response => response.json());
+        }
+        catch {
+            throw("error in getLessonNamesOfTopic"); 
+        }
+    }
+
+    //8 create new topic in clas
+    static async createNewLesson(name: string, topicId: string, rows: Row[] = []): Promise<Lesson> {
+        try {
+            return fetch(process.env.REACT_APP_API_DOMAIN + `/v1/lessons`, {
+                method: 'post', mode: 'cors', headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(
+                    {
+                        name: name,
+                        topic: topicId,
+                        rows: rows
+                    })
+                
+            })
+                .then(response => response.json());
+        }
+        catch {
+            throw("error in createNewLesson");
+        }
+    }
+    
+    //9 get task names
+    static async getTaskNamesOfTopic(topicId: string): Promise<Task[]> {
+        try {
+            return fetch(process.env.REACT_APP_API_DOMAIN + `/v1/tasks/topic/${topicId}?name`, {
+                method: 'get', mode: 'cors', headers: { 'Content-Type': 'application/json' },
+            })
+                .then(response => response.json());
+        }
+        catch {
+            throw("error in getTaskNamesOfTopic"); 
+        }
+    }
+    
+    //8 create new topic in clas
+    static async createNewTask(name: string, topicId: string): Promise<Task> {
+        try {
+            return fetch(process.env.REACT_APP_API_DOMAIN + `/v1/tasks`, {
+                method: 'post', mode: 'cors', headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(
+                    {
+                        name: name,
+                        topic: topicId
+                    })
+                
+            })
+                .then(response => response.json());
+        }
+        catch {
+            throw("error in createNewTask");
+        }
+    }
 }

@@ -61,7 +61,7 @@ export function CreateTopicButton(props: CreateTopicButtonProps) {
 
   function ImportHandler(): void {
     if (selectedLibraryTopic) {
-      APIService.createNewTopic(selectedLibraryTopic.name, props.clasId, selectedLibraryTopic.lessons);
+      //APIService.createNewTopic(selectedLibraryTopic.name, props.clasId, selectedLibraryTopic.lessons);
     }
   }
 

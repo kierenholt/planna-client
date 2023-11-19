@@ -14,26 +14,23 @@ export interface Clas {
 
 export interface Topic {
     _id: string;
-    lessons: Lesson[];
     name: string;
     clas: Clas;
     isPublicShared: boolean;
 }
 
-export interface AssignedNote {
-    courseUrl: string;
-    lessonUrl: string;
-    markbookUrl: string;
-    assignedDate: Date;
-    lessonId: string;
+export interface Task {
+    _id: string;
+    name: string;
+    topic: Topic;
 }
 
 export interface Lesson {
-    rows: Row[];
+    _id: string;
     name: string;
-    assignedNotes: AssignedNote[];
+    topic: Topic;
+    rows: Row[];
 }
-
 
 export interface Row {
     _id: string;

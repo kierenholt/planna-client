@@ -18,7 +18,7 @@ export function ClassesCardList(props: ClassesListProps) {
             maxWidth:"1200px",
             flexWrap:"wrap",
     }}>
-            {props.classes.map(c => <ClassCard 
+            {props.classes.map(c => <ClassCard key={c._id}
                 handleClick={props.handleClick} clas={c} ></ClassCard>            )}
             {props.children}
         </Sheet>

@@ -1,0 +1,151 @@
+/* TIMER DIV */
+div.timer {
+  position: fixed;
+  right: 1em;
+  top: 1em;
+}
+
+/* SHEETMANAGER COUNTDOWN WARNING */
+div.sheetManagerCountdown {
+  position: fixed;
+  right: 1em;
+  top: 2em;
+  color: red;
+}
+
+/* RANDOM SELECTORS */
+.red { color: red; }
+.relative { position: relative; }
+.displayNone { display: none !important; }
+.displayBlock { display: block }
+.displayInlineBlock { display: inline-block }
+.greenBackground { background-color: #0dc50dbd; }
+.greyBackground { background-color:#b3b3b3; }
+.greyBorder { border-color: #b3b3b3; }
+.greenBorder { border-color: #00aa00; }
+.whiteBackground { background-color:#fff;}
+
+/* INLINE ELEMENTS */
+.md-superscript {
+  position: relative;
+  top: -0.4em;
+  font-size: 80%;
+}
+.md-subscript {
+  position: relative;
+  bottom: -0.6em;
+  font-size: 80%;
+}
+.md-underline { text-decoration: underline; }
+.md-bold { font-weight: bold; }
+.md-heading { font-size: 200%; }
+
+/*USER ERRORS*/ 
+.errorText {
+  color: red;
+}
+
+/*MARKDOWN CODE BLOCK*/
+pre.md-code {
+    background: #F1F1F1;
+    border: 1px solid #E1E1E1;
+    border-radius: 4px;
+    font-size: 90%;
+    font-family: 'Roboto Mono', 'Monaco', 'Menlo', 'Ubuntu Mono', 'Consolas', 'source-code-pro', monospace;
+}
+
+pre.md-code {
+  display: table;
+  table-layout: fixed;
+  width: 100%; /* anything but auto, otherwise fixed layout not guaranteed */
+  white-space: pre-wrap;
+  padding: 5px 5px 5px 5px;
+}
+pre.md-code::before {
+  counter-reset: linenum;
+}
+pre.md-code span.tr {
+  display: table-row;
+  counter-increment: linenum;
+}
+pre.md-code span.th { /* used for line numbers */
+  display: table-cell;
+  user-select: none;
+  -moz-user-select: none;
+  -webkit-user-select: none;
+  border-right: solid 1px #aaa;
+  color: #aaa;
+  padding: 0px 5px 0px 0px;
+}
+pre.md-code span.th::before {
+  content: counter(linenum);
+  text-align: right;
+  display: block;
+}
+pre.md-code span.th {
+  width: 4em; /* or whatever the desired width of the numbers column is */
+}
+pre.md-code code { /*contains the code */ 
+  padding: 0px 0px 0px 5px;
+  display: table-cell;
+}
+
+/* MARKDOWN TABLE */
+table.md-table.withBorder > tbody > tr > td {
+  border-width: 1px;
+  border-style: solid;
+  border-color: black;
+}
+table.md-table > tbody > tr > td {
+  height: 2em;
+  border-width: 1px;
+  border-style: solid;
+}
+table.md-table {
+  overflow: visible;
+  border-collapse: collapse;
+  table-layout: fixed;
+  width: 100%;
+  font-size: inherit;
+  color: inherit;
+}
+table.md-table.withBorder {
+  border-width: 1px;
+  border-style: solid;
+  border-color: black;
+}
+
+/*  INPUTS  */
+textarea { width: 90% }
+
+/* FRACTIONS */
+table.md-fraction {
+  display: inline-table;
+  font-size: 75%;
+  transform: translateY(-15%);
+  width: auto;
+  border-style: none;
+}
+table.md-fraction > tbody > tr > td { border-style: none; text-align: center}
+table.md-fraction > tbody > tr:first-child > td {
+  border-style: none none solid none;
+  border-width: 1px;
+}
+
+/* DOLLARS */
+div.dollarCup { display: inline-block; }
+
+/* ROLLOVERS */
+div.md-rollover:not(:hover) {
+  color: transparent;
+  background: repeating-linear-gradient(
+  45deg,
+  #fff,
+  #fff 10px,
+  #aaa 10px,
+  #aaa 20px
+  );
+}
+div.md-rollover:not(:hover) img {
+  opacity: 0;
+}

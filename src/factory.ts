@@ -3,8 +3,8 @@ import { Clas, Lesson, Row, Topic } from "./interfaces";
 
 
 export class ClasFactory {
-    static createDefault(className: string, clasId: string): Promise<Clas> {
-        return APIService.createClass(className, clasId).then(
+    static createDefault(className: string, userId: string): Promise<Clas> {
+        return APIService.createClass(className, userId).then(
             clas => { 
                 TopicFactory.createDefault(clas._id);
                 return clas;
@@ -15,37 +15,32 @@ export class ClasFactory {
 
 export class TopicFactory {
     static createDefault(clasId: string): Promise<Topic> {
-        return LessonFactory.createDefault().then(
-            lesson => APIService.createNewTopic(
-                "Sample Topic", clasId, [lesson]
-            )
+        return APIService.createNewTopic("Sample Topic", clasId).then(
+            topic => {
+                LessonFactory.createDefault(topic._id);
+                return topic;
+            }
         )
     }
 }
 
-class LessonFactory {
-    static createDefault(): Promise<Lesson> {
-        return RowFactory.createDefault().then(
-            row => {
-                return {
-                    rows: [row],
-                    name: "Sample lesson",
-                    assignedNotes: [],
-                };
-            }
-        );
+export class LessonFactory {
+    static createDefault(topicId: string): Promise<Lesson> {
+        return APIService.createNewLesson(
+            "Sample Lesson", 
+            topicId,
+            [RowFactory.getDefault()])
     }
 }
 
-
-class RowFactory {
-    static createDefault(): Promise<Row> {
-        return Promise.resolve({
+export class RowFactory {
+    static getDefault(): Row {
+        return {
             _id: "65441f653bfbf117153c2316", //matching db element
             comment: "",
             title: "Sample question",
             purpose: "question",
             leftRight: ["This is a sample question", ""]
-        });
+        };
     }
 }

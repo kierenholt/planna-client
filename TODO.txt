@@ -1,0 +1,7 @@
+
+option to pop out inspector?
+list lessons and tasks by date
+mathjax https://jsbin.com/?html,output
+
+MOBILE
+tap action https://stackoverflow.com/questions/64478868/how-to-properly-design-list-item-with-actions
