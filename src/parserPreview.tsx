@@ -2,29 +2,30 @@ import { BlockParser, FullLineParser, InlineParser } from "./parsers";
 
 
 export function ParserPreview() {
-    let str1 = `
-    
-aa
-bb
-*cc
-*dd
-ee
-*ff
+    let inlineTest = `aaa*bold*bbb^super^ccc~sub~ddd![image](image)eee[link](link)`;
+    let fullLineTest = `#heading with ![image](image)
+*bbb*bold*
+new lines
+`
+    let blockTest = `
+???
+* bullet1
+* bullet2
+#heading1
+???
 
-# heading
-    
-    `;
-    
-    let funcStack = [
-        InlineParser.outsideBold, InlineParser.outsideFraction, InlineParser.outsideSub,
-        InlineParser.outsideSuper, InlineParser.outsideanchor, InlineParser.outsideimage                  
-    ];
+|a|b|c
+|d|e|f
 
+    `
     return <div>
         {
-        //BlockParser.insideList(BlockParser.toLines(str1))
-        //FullLineParser.all(BlockParser.toLines(str1))
-        funcStack[0](str1)
+        BlockParser.outside(BlockParser.toLines(blockTest))
+        //BlockParser.toLines(fullLineTest).map(FullLineParser.outside)
+        //FullLineParser.outside(fullLineTest)
+        //InlineParser.outside(inlineTest)
+        //InlineParser.outside("")
+        
         };
     </div>
 }
