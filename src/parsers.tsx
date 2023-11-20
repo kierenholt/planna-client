@@ -22,7 +22,7 @@ export class BlockParser {
         let isCodeLine = (lines[lineNum] as string).startsWith("```");
         if (!isCodeLine) return this.insideCode(lines, lineNum+1, inTablePending.concat(lines[lineNum]));
         return [<pre className="md-code">{
-            inTablePending.map(FullLineParser.codeLine) //nothing else
+            inTablePending.map(FullLineParser.codeLine) //nothing else allowed
             }</pre>].concat(this.outsideCode(lines, lineNum+1));
     }
     
@@ -38,7 +38,7 @@ export class BlockParser {
         let isRolloverLine = (lines[lineNum] as string).startsWith("???");
         if (!isRolloverLine) return this.insideRollover(lines, lineNum+1, inTablePending.concat(lines[lineNum]));
         return [<div className="md-rollover">{
-            inTablePending.join("\n") //needs all
+            inTablePending.join("\n") //needs all blocks
             }</div>].concat(this.outsideRollover(lines, lineNum+1));
     }
 
@@ -54,7 +54,8 @@ export class BlockParser {
         let isTableRow = (lines[lineNum] as string).startsWith("|");
         if (isTableRow) return this.insideTable(lines, lineNum+1, inTablePending.concat(lines[lineNum]));
         return [<table className="md-table"><tbody>{
-                inTablePending.map(s => FullLineParser.tableLine(s as string))
+                inTablePending.map(s => FullLineParser.tableLine(s as string)) 
+                //needs all inline
             }</tbody></table>].concat(this.outsideTable(lines, lineNum));
     }
     
@@ -71,6 +72,7 @@ export class BlockParser {
         if (isListLine) return this.insideList(lines, lineNum+1, inListPending.concat(lines[lineNum]));
         return [<ul className="md-list">{
             inListPending.map(FullLineParser.bulletLine)
+            //needs all inline
             }</ul>
         ].concat(this.outsideList(lines, lineNum));
     }
@@ -143,16 +145,6 @@ export class FullLineParser {
 }
 
 export class InlineParser {
-    static all(line: any): any[] {
-        //they can intersect so flatten each time
-        let ret: any[] = InlineParser.outsideBold(line);
-        ret = flattenAndExecute(ret, InlineParser.outsideFraction);        
-        ret = flattenAndExecute(ret, InlineParser.outsideSub);        
-        ret = flattenAndExecute(ret, InlineParser.outsideSuper);        
-        ret = flattenAndExecute(ret, InlineParser.outsideanchor);        
-        ret = flattenAndExecute(ret, InlineParser.outsideimage);        
-        return ret;
-    }
 
     static outsideBold(line: any, i: number = 0, pending: string = ""): any[] {
         if (typeof(line) != "string") return [line];
@@ -265,5 +257,23 @@ export class InlineParser {
     }
 } 
 
+export class FuncStack {
+    inlineStack: any[];
+    constructor(stack: any[]) {
+        this.inlineStack = stack;
+    }
 
+    nextInline(value: any): (s: any) => any {
+        if (this.inlineStack) { 
+            return this.inlineStack[0];
+        }
+        return (s: any) => s;
+    }
 
+    innerStack() {
+        if (this.inlineStack.length > 1) {
+            return new FuncStack(this.inlineStack.slice(1));
+        }
+        return new FuncStack([(s: any) => s]);
+    }
+}
