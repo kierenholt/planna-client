@@ -20,7 +20,7 @@ export function AppContent(props: AppContentProps) {
     let [classes, setClasses] = useState<Clas[]>([]);
 
     useEffect(() => {
-        if (props.user) APIService.getClassesOfUser(props.user._id)
+        APIService.getClassesOfUser(props.user._id)
             .then((items: Clas[]) => {
                 if (items) setClasses(items)
             });
@@ -46,7 +46,7 @@ export function AppContent(props: AppContentProps) {
         {selectedClass ?
             <div>
                 {/* TOPIC LIST CONTAINER */}
-                <TopicContainer selectedClass={selectedClass} />
+                <TopicContainer selectedClassId={selectedClass._id} />
             </div>
 
             : 

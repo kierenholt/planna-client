@@ -4,52 +4,59 @@ import React, { useEffect, useState } from "react";
 import { LessonsAndTasksList } from "./lessonsAndTasksList";
 import { APIService } from "./APIService";
 import { CreateLessonOrTaskButton } from "./createLessonOrTaskButton";
-import { FullLineParser } from "./parsers";
+import { LessonDiv } from "./lessonDiv";
+import { TaskDiv } from "./taskDiv";
 
 interface LessonsAndTasksContainerProps {
-    selectedTopic: Topic;
+    selectedTopicId: string;
 }
-
 
 export function LessonsAndTasksContainer(props: LessonsAndTasksContainerProps) {
 
     let [selectedLessonOrTask, setSelectedLessonOrTask] = useState<Lesson | Task | null>(null);
     let [lessons, setLessons] = useState<Lesson[]>([]);
     let [tasks, setTasks] = useState<Task[]>([]);
+    let [selectedType, setSelectedType] = useState<string>("");
 
     //GET LESSONS
     useEffect(() => {
-        if (props.selectedTopic) {
-            APIService.getLessonNamesOfTopic(props.selectedTopic._id)
-                .then((items: Lesson[]) => {
-                    if (items) setLessons(items)
-                });
-        }
-    }, [props.selectedTopic])
+        APIService.getLessonNamesOfTopic(props.selectedTopicId)
+            .then((items: Lesson[]) => {
+                if (items) setLessons(items)
+            });
+    }, [props.selectedTopicId])
 
     //GET TASKS
     useEffect(() => {
-        if (props.selectedTopic) {
-            APIService.getTaskNamesOfTopic(props.selectedTopic._id)
-                .then((items: Task[]) => {
-                    if (items) setTasks(items)
-                });
-        }
-    }, [props.selectedTopic])
+        APIService.getTaskNamesOfTopic(props.selectedTopicId)
+            .then((items: Task[]) => {
+                if (items) setTasks(items)
+            });
+    }, [props.selectedTopicId])
 
     return (
         <Stack direction="row">
             {/* LESSON LIST */}
             <LessonsAndTasksList lessons={lessons} selectedLessonOrTask={selectedLessonOrTask}
-                setSelectedLessonOrTask={setSelectedLessonOrTask} tasks={tasks} >
-                <CreateLessonOrTaskButton topicId={props.selectedTopic._id} 
+                setSelectedLessonOrTask={setSelectedLessonOrTask} tasks={tasks}  
+                setSelectedType={setSelectedType}>
+
+                <CreateLessonOrTaskButton topicId={props.selectedTopicId} 
                 setLessons={setLessons} Lessons={lessons} 
-                setTasks={setTasks} Tasks={tasks} />
+                setTasks={setTasks} Tasks={tasks}/>
+
             </LessonsAndTasksList> 
 
             {/* LESSON OR TASK PREVIEW */}
             <Stack direction="column">
-                {}
+                {
+                    selectedLessonOrTask ? 
+                        (selectedType == "lesson" ? <LessonDiv 
+                            lessonId={(selectedLessonOrTask as Lesson)._id}
+                        /> :
+                        selectedType == "task" ? <TaskDiv ></TaskDiv> : <></>)
+                    : <></>
+                }
             </Stack>
         </Stack>
     )

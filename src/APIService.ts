@@ -186,4 +186,25 @@ export class APIService {
             throw("error in createNewTask");
         }
     }
+    
+    //check response
+    static async checkResponse(index: number, rowId: string, response: string, seed: number): Promise<Task> {
+        try {
+            return fetch(process.env.REACT_APP_API_DOMAIN + `/v1/responses`, {
+                method: 'post', mode: 'cors', headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(
+                    {
+                        index: index,
+                        rowId: rowId,
+                        response: response,
+                        seed: seed
+                    })
+                
+            })
+            .then(response => response.json());
+        }
+        catch {
+            throw("error in check response");
+        }
+    }
 }

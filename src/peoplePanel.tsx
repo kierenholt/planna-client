@@ -1,4 +1,4 @@
 
 export function PeoplePanel() {
-    return <></>
+    return <>People panel</>
 }

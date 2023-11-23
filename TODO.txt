@@ -1,7 +1,14 @@
-
+TODO
 option to pop out inspector?
 list lessons and tasks by date
 mathjax https://jsbin.com/?html,output
+add support for array expressions in comments
+prevent sudoku types from showing up in the lessons
+add accessibility to student page
+
+add check marks, cross etc..
+add solutions to print out
+find a way to store the responses
 
 MOBILE
 tap action https://stackoverflow.com/questions/64478868/how-to-properly-design-list-item-with-actions

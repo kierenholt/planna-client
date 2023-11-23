@@ -7,7 +7,7 @@ import { useEffect, useState } from "react";
 import { LessonsAndTasksContainer } from "./lessonsAndTasksContainer";
 
 interface TopicContainerProps {
-    selectedClass: Clas;
+    selectedClassId: string;
 }
 
 
@@ -17,13 +17,13 @@ export function TopicContainer(props: TopicContainerProps) {
     let [topics, setTopics] = useState<Topic[]>([]);
 
     useEffect(() => {
-        if (props.selectedClass) {
-            APIService.getTopicNamesOfClass(props.selectedClass._id)
+        if (props.selectedClassId) {
+            APIService.getTopicNamesOfClass(props.selectedClassId)
                 .then((items: Topic[]) => {
                     if (items) setTopics(items)
                 });
         }
-    }, [props.selectedClass])
+    }, [props.selectedClassId])
 
     return (
 
@@ -31,7 +31,7 @@ export function TopicContainer(props: TopicContainerProps) {
             <Stack direction="column">
                 {/* TOPIC TOOLBAR */}
                 <Stack direction="row">
-                    <CreateTopicButton clasId={props.selectedClass._id} setTopics={setTopics}
+                    <CreateTopicButton clasId={props.selectedClassId} setTopics={setTopics}
                         topics={topics} />
                 </Stack>
                 {/* TOPIC LIST */}
@@ -42,7 +42,7 @@ export function TopicContainer(props: TopicContainerProps) {
             {/* LESSONS AND TASKS */}
             {
                 selectedTopic ?
-                    <LessonsAndTasksContainer selectedTopic={selectedTopic} /> :
+                    <LessonsAndTasksContainer selectedTopicId={selectedTopic._id} /> :
                     <></>
             }
         </Stack>

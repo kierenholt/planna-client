@@ -11,6 +11,7 @@ interface LessonsAndTasksListProps {
     lessons: Lesson[];
     tasks: Task[];
     children: React.ReactNode;
+    setSelectedType: (s: string) => void;
 }
 
 export function LessonsAndTasksList(props: LessonsAndTasksListProps) {
@@ -23,7 +24,10 @@ export function LessonsAndTasksList(props: LessonsAndTasksListProps) {
                     <ListItem>
                         <ListItemButton
                             key={t._id}
-                            onClick={() => props.setSelectedLessonOrTask(t)}
+                            onClick={() => { 
+                                props.setSelectedLessonOrTask(t);
+                                props.setSelectedType("lesson");
+                            }}
                             variant={props.selectedLessonOrTask == t ? 'solid' : 'outlined'}>
                             <ListItemIcon>
                               <CoPresentIcon />
@@ -37,7 +41,10 @@ export function LessonsAndTasksList(props: LessonsAndTasksListProps) {
                     <ListItem>
                         <ListItemButton
                             key={t._id}
-                            onClick={() => props.setSelectedLessonOrTask(t)}
+                            onClick={() => {
+                                props.setSelectedLessonOrTask(t);
+                                props.setSelectedType("task");
+                            }}
                             variant={props.selectedLessonOrTask == t ? 'solid' : 'outlined'}>
                             <ListItemIcon>
                               <AssignmentIcon />
