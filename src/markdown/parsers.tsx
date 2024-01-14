@@ -9,7 +9,7 @@ import { MDSelect } from "./mdSelect";
 
 export interface FieldElementProps {
     index: number,
-    UID: string,
+    UID: string, //for the radio buttons "name" attribute 
     seed: number
 }
 
@@ -21,6 +21,10 @@ export class MarkdownParser {
     
     constructor(expressions: IExpression[])  {
         this.expressions = expressions;
+    }
+
+    parse(markdown: string): any[] {
+        return this.outside(this.toLines(markdown));
     }
 
     isNewRadioGroup(letter: string): boolean {
@@ -44,10 +48,6 @@ export class MarkdownParser {
     //used by dollars
     get nextExpressionValue(): string {
         return  this.expressions[this.currentExpressionIndex++].value
-    }
-
-    parse(markdown: string): any[] {
-        return this.outside(this.toLines(markdown));
     }
 
     outside(lines: any[], lineNum: number = 0): any[] {

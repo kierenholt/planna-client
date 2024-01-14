@@ -3,23 +3,26 @@ import jwt_decode from "jwt-decode"
 import { JWT } from './accessToken';
 import { CredentialResponse, GoogleLogin, GoogleOAuthProvider } from "@react-oauth/google";
 import { APIService } from "./APIService";
+import { User } from "./interfaces";
+import { LoggedInUser } from "./user";
 
 interface AuthWrapperProps {
-    onAuthenticated: (s: JWT) => void;
     children: React.ReactNode;
 }
 
-export const LogoutContext = createContext(() => {});
+export const LogoutContext = createContext<() => void>(() => {});
+export const UserContext = createContext<LoggedInUser | null>(null);
 
 export function AuthWrapper(props: AuthWrapperProps) {
     const KEY_FOR_GOOGLE_ACCESS_TOKEN = "googleAccessToken";
 
     let [accessToken, setAccessToken] = useState<JWT | null>(null);
+    let [user, setUser] = useState<LoggedInUser | null>(null);
 
     useEffect(() => {
         let token = getAccessTokenFromStorage();
         if (token) {
-            props.onAuthenticated(token);
+            setUser(new LoggedInUser(token));
         }
     }, []) //first time only
 
@@ -30,7 +33,7 @@ export function AuthWrapper(props: AuthWrapperProps) {
             await APIService.getOrCreateUser(decoded);
             setAccessToken(decoded);
             localStorage.setItem(KEY_FOR_GOOGLE_ACCESS_TOKEN, JSON.stringify(decoded));
-            props.onAuthenticated(decoded);
+            setUser(new LoggedInUser(decoded));
         }
         else {
             throw new Error("invalid jwt");
@@ -59,7 +62,10 @@ export function AuthWrapper(props: AuthWrapperProps) {
         <GoogleOAuthProvider clientId={process.env.REACT_APP_GOOGLE_CLIENT_ID as string}>
             <LogoutContext.Provider value={logout}>
             {accessToken ?
-                props.children :
+                <UserContext.Provider value={user}>
+                {props.children} 
+                </UserContext.Provider>
+                :
                 <GoogleLogin onSuccess={loginSuccessHandler} onError={loginErrorHandler} />}
             </LogoutContext.Provider>
         </GoogleOAuthProvider>

@@ -160,13 +160,7 @@ export class Helpers {
       }
       return ret;
     }
-  
-    static replaceItem<T>(arr: T[], oldItem: T, newItem: T) {
-      this.removeFromArray(arr, newItem);
-      let index = arr.indexOf(oldItem);
-      if (index != -1) arr[index] = newItem;
-    }
-  
+    
     static deepIndexOf<T>(arr: T[], item: T): number {
       for (let i = 0; i < arr.length; i++) {
         if (this.deepCompare(item, arr[i])) return i;
@@ -195,10 +189,12 @@ export class Helpers {
     }
   
     //removes all instances not just the first
-    static removeFromArray<T>(array: T[], item: T) {
-      for (let i = array.length; i >= 0; i--) {
-        if (array[i] == item) { array.splice(i, 1); }
+    static arrayWithout<T>(array: T[], item: T) {
+      let ret = [];
+      for (let i = 0; i < array.length; i++) {
+        if (array[i] != item) { ret.push(array[i]) }
       }
+      return ret;
     }
   
     //removes one instance

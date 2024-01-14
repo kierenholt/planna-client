@@ -9,14 +9,10 @@ import { LoggedInUser } from './user';
 
 function App() {
 
-  let [user, setUser] = useState<LoggedInUser | null>(null);
-
   return (
     <div className="App">
-      <AuthWrapper onAuthenticated={(s: JWT) => {
-        setUser(new LoggedInUser(s));
-      }}>
-        {user ? <AppContent user={user}/> : <></>}
+      <AuthWrapper>
+        <AppContent/>
       </AuthWrapper>
     </div>
   );

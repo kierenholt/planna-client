@@ -1,30 +1,31 @@
 import { ClassesCardList } from './classesList';
-import { Clas, Topic } from './interfaces';
+import { Clas } from './interfaces';
 import { AccountMenu } from './accountMenu';
 import { Button, Card, Stack } from '@mui/joy';
 
 import { CreateClassCard } from './createClassButton';
-import { LoggedInUser as LoggedInUser } from './user';
-import { useEffect, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import { APIService } from './APIService';
 import { TopicContainer } from './TopicContainer';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
+import { UserContext } from './authWrapper';
 
-interface AppContentProps {
-    user: LoggedInUser;
-}
 
-export function AppContent(props: AppContentProps) {
+export function AppContent() {
 
     let [selectedClass, setSelectedClass] = useState<Clas | null>(null);
     let [classes, setClasses] = useState<Clas[]>([]);
+    
+    let user = useContext(UserContext);
 
     useEffect(() => {
-        APIService.getClassesOfUser(props.user._id)
-            .then((items: Clas[]) => {
-                if (items) setClasses(items)
-            });
-    }, [props.user]);
+        if (user) {
+            APIService.getClassesOfUser(user._id)
+                .then((items: Clas[]) => {
+                    if (items) setClasses(items)
+                });
+        }
+    }, [user]);
 
     return (<div>
         {/* TOP ROW */}
@@ -39,20 +40,20 @@ export function AppContent(props: AppContentProps) {
                 {selectedClass?.name}
             </Card>
             <Stack style={{ padding: "20px" }} direction="row" justifyContent="flex-end" alignItems="center" spacing={2} >
-                <AccountMenu user={props.user} />
+                <AccountMenu />
             </Stack>
         </Stack>
 
         {selectedClass ?
             <div>
                 {/* TOPIC LIST CONTAINER */}
-                <TopicContainer selectedClassId={selectedClass._id} />
+                <TopicContainer classId={selectedClass._id} />
             </div>
 
             : 
             <ClassesCardList handleClick={setSelectedClass}
-                classes={classes}>
-                <CreateClassCard userId={props.user._id} setClasses={setClasses}
+                classes={classes} setClasses={setClasses}>
+                <CreateClassCard setClasses={setClasses}
                     classes={classes} setSelectedClas={setSelectedClass} />
             </ClassesCardList>
         }

@@ -1,19 +1,20 @@
 import { Add } from "@mui/icons-material";
 import { Box, Button, Card, FormHelperText, FormLabel, Input, Modal, Typography } from "@mui/joy";
-import { useState } from "react";
+import { useContext, useState } from "react";
 import { Clas, Topic } from "./interfaces";
 import { FieldErrors, FieldValues, useForm } from "react-hook-form";
+import { UserContext } from "./authWrapper";
 import { APIService } from "./APIService";
-import { ClasFactory } from "./factory";
 
 interface CreateClassCardProps {
-  userId: string;
   setClasses: (c: Clas[]) => void;
   classes: Clas[];
   setSelectedClas: (c: Clas) => void;
 }
 
 export function CreateClassCard(props: CreateClassCardProps) {
+
+  let user = useContext(UserContext);
 
   const [open, setOpen] = useState(false);
   const handleOpen = () => setOpen(true);
@@ -28,16 +29,18 @@ export function CreateClassCard(props: CreateClassCardProps) {
   };
 
   const handleRegistration = (data: any) => {
-    ClasFactory.createDefault(data.name, props.userId)
-      .then((c) => {
-        let newValue: Clas[] = new Array<Clas>();
-        newValue.push(...props.classes);
-        newValue.push(c);
-        props.setClasses(newValue);
-        props.setSelectedClas(c);
-        handleClose();
-      })
-
+    if (user) {
+      APIService.createClass(data.name, user._id)
+        .then(async (c) => {
+          await APIService.cloneDefaultTopic(c._id);
+          let newValue: Clas[] = new Array<Clas>();
+          newValue.push(...props.classes);
+          newValue.push(c);
+          props.setClasses(newValue);
+          props.setSelectedClas(c);
+          handleClose();
+        })
+    }
   }
 
 

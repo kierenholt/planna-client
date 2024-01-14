@@ -4,8 +4,6 @@ import { useEffect, useState } from "react";
 import { Topic } from "./interfaces";
 import { APIService } from "./APIService";
 import { FieldErrors, FieldValues, useFieldArray, useForm } from "react-hook-form";
-import { create } from "domain";
-import { TopicFactory } from "./factory";
 
 interface CreateTopicButtonProps {
   clasId: string;

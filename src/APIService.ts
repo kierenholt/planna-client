@@ -15,7 +15,7 @@ export class APIService {
                     id: 'G' + accessToken.sub
                 })
             })
-                .then(response => response.json())
+            .then(response => response.json())
         }
         catch {
             throw("error in getOrCreateUser");
@@ -34,7 +34,7 @@ export class APIService {
                         settings: ""
                     })
             })
-                .then(response => response.json());
+            .then(response => response.json());
         }
         catch {
             throw("error in createClass");
@@ -47,7 +47,7 @@ export class APIService {
             return fetch(process.env.REACT_APP_API_DOMAIN + `/v1/classes/owner/${userId}`, {
                 method: 'get', mode: 'cors', headers: { 'Content-Type': 'application/json' },
             })
-                .then(response => response.json());
+            .then(response => response.json());
         }
         catch {
             throw("error in getClassesOfUser");
@@ -55,16 +55,12 @@ export class APIService {
     }
 
     //4
-    static async deleteClass(classId: string, userId: string): Promise<void> {
+    static async deleteClass(classId: string): Promise<void> {
         try {
             return fetch(process.env.REACT_APP_API_DOMAIN + "/v1/classes/" + classId, {
-                method: 'delete', mode: 'cors', headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(
-                    {
-                        ownerId: userId
-                    })
+                method: 'delete', mode: 'cors', headers: { 'Content-Type': 'application/json' }
             })
-                .then(response => response.json());
+            .then(response => response.json());
         }
         catch {
             throw("error in deleteClass");
@@ -81,10 +77,23 @@ export class APIService {
                         name: name
                     })
             })
-                .then(response => response.json());
+            .then(response => response.json());
         }
         catch {
             throw("error in renameClass");
+        }
+    }
+
+    //5
+    static async cloneDefaultClass(ownerId: string): Promise<void> {
+        try {
+            return fetch(process.env.REACT_APP_API_DOMAIN + "/v1/classes/owner/" + ownerId, {
+                method: 'copy', mode: 'cors', headers: { 'Content-Type': 'application/json' }
+            })
+            .then(response => response.json());
+        }
+        catch {
+            throw("error in clone default class");
         }
     }
 
@@ -155,6 +164,20 @@ export class APIService {
         }
     }
     
+
+    //5
+    static async cloneDefaultTopic(classId: string): Promise<void> {
+        try {
+            return fetch(process.env.REACT_APP_API_DOMAIN + "/v1/topics/class/" + classId, {
+                method: 'copy', mode: 'cors', headers: { 'Content-Type': 'application/json' }
+            })
+            .then(response => response.json());
+        }
+        catch {
+            throw("error in clone default topic");
+        }
+    }
+    
     //9 get task names
     static async getTaskNamesOfTopic(topicId: string): Promise<Task[]> {
         try {
@@ -168,6 +191,32 @@ export class APIService {
         }
     }
     
+    //9 get rows
+    static async getLessonIncludingRows(lessonId: string): Promise<Lesson> {
+        try {
+            return fetch(process.env.REACT_APP_API_DOMAIN + `/v1/lessons/${lessonId}`, {
+                method: 'get', mode: 'cors', headers: { 'Content-Type': 'application/json' },
+            })
+                .then(response => response.json());
+        }
+        catch {
+            throw("error in get lesson inc rows"); 
+        }
+    }
+
+    //5
+    static async cloneDefaultLesson(topicId: string): Promise<void> {
+        try {
+            return fetch(process.env.REACT_APP_API_DOMAIN + "/v1/lessons/topic/" + topicId, {
+                method: 'copy', mode: 'cors', headers: { 'Content-Type': 'application/json' }
+            })
+            .then(response => response.json());
+        }
+        catch {
+            throw("error in clone default lesson");
+        }
+    }
+
     //8 create new topic in clas
     static async createNewTask(name: string, topicId: string): Promise<Task> {
         try {
@@ -188,7 +237,7 @@ export class APIService {
     }
     
     //check response
-    static async checkResponse(index: number, rowId: string, response: string, seed: number): Promise<Task> {
+    static async checkResponse(index: number, rowId: string, response: string, seed: number, userId: string): Promise<Task> {
         try {
             return fetch(process.env.REACT_APP_API_DOMAIN + `/v1/responses`, {
                 method: 'post', mode: 'cors', headers: { 'Content-Type': 'application/json' },
@@ -197,7 +246,8 @@ export class APIService {
                         index: index,
                         rowId: rowId,
                         response: response,
-                        seed: seed
+                        seed: seed,
+                        userId: userId
                     })
                 
             })
