@@ -1,15 +1,16 @@
 import { Avatar, Button, Card, CardActions, CardContent, IconButton, Typography } from "@mui/joy";
-import { Clas } from "./interfaces";
+import { IClas } from "./interfaces";
 import CardHeader from '@mui/material/CardHeader';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
 import React from "react";
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
+import { RenameModal } from "./renameModal";
 
 interface ClassCardProps {
-    handleClick: (clas: Clas) => void;
-    clas: Clas;
-    deleteClassHandler: () => void;
+  handleClick: (clas: IClas) => void;
+  clas: IClas;
+  deleteClassHandler: () => void;
 }
 
 export function ClassCard(props: ClassCardProps) {
@@ -23,39 +24,44 @@ export function ClassCard(props: ClassCardProps) {
     setAnchorEl(null);
   };
 
-    return (
+  const renameHandler = () => {}
+
+  return (
     <Card sx={{ width: 275, margin: "20px" }}>
-      
+
       <CardContent>
-        <CardHeader 
-        avatar={
-          <Avatar aria-label="recipe">
-            R
-          </Avatar>
-        }
-        action={
-          <IconButton aria-label="settings"
-            onClick={handleClick}>
-            <MoreVertIcon />
-          </IconButton>
-        }
-        title={props.clas.name}
-        subheader="September 14, 2016">
-          
+        <CardHeader
+          avatar={
+            <Avatar aria-label="recipe">
+              R
+            </Avatar>
+          }
+          action={
+            <IconButton aria-label="settings"
+              onClick={handleClick}>
+              <MoreVertIcon />
+            </IconButton>
+          }
+          title={props.clas.name}
+          subheader="September 14, 2016">
+
         </CardHeader>
       </CardContent>
       <CardActions>
         <Button onClick={() => props.handleClick(props.clas)}>Open</Button>
       </CardActions>
-      
+
       <Menu
         anchorEl={anchorEl}
         open={open}
         onClose={handleClose} >
-          <MenuItem onClick={props.deleteClassHandler}>
+        <MenuItem onClick={props.deleteClassHandler}>
           Delete
-          </MenuItem>
-        </Menu>
+        </MenuItem>
+      </Menu>
+      <RenameModal defaultText="" submitHandler={renameHandler} isOpen={false}/>
+      
     </Card>
-    )    
+
+  )
 }

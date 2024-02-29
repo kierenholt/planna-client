@@ -1,11 +1,11 @@
 import { Stack, Typography } from "@mui/joy";
-import { Row } from "./interfaces";
+import { IRow } from "./interfaces";
 import { useEffect } from "react";
 import { IExpression, QuestionExpression, TemplateExpression } from "./markdown/expression";
 import { MarkdownParser } from "./markdown/parsers";
 
 interface RowDivProps {
-    row: Row;
+    row: IRow;
 }
 
 export function RowDiv(props: RowDivProps) {

@@ -1,14 +1,14 @@
 import { Add, Api, CheckBox } from "@mui/icons-material";
 import { Box, Button, ButtonGroup, FormHelperText, FormLabel, Input, Modal, Stack } from "@mui/joy";
 import { useEffect, useState } from "react";
-import { Topic } from "./interfaces";
-import { APIService } from "./APIService";
+import { ITopic } from "./interfaces";
 import { FieldErrors, FieldValues, useFieldArray, useForm } from "react-hook-form";
+import { APIService } from './APIService/APIService';
 
 interface CreateTopicButtonProps {
   clasId: string;
-  setTopics: (topics: Topic[]) => void;
-  topics: Topic[];
+  setTopics: (topics: ITopic[]) => void;
+  topics: ITopic[];
 }
 
 enum createTopicMode {
@@ -27,14 +27,14 @@ export function CreateTopicButton(props: CreateTopicButtonProps) {
   const handleError = (errors: FieldErrors<FieldValues>) => { };
   const registerOptions = { name: { required: true } };
 
-  let [libraryTopics, setLibraryTopics] = useState<Topic[]>([]);
-  let [selectedLibraryTopic, setSelectedLibraryTopic] = useState<Topic | null>(null);
+  let [libraryTopics, setLibraryTopics] = useState<ITopic[]>([]);
+  let [selectedLibraryTopic, setSelectedLibraryTopic] = useState<ITopic | null>(null);
 
   const handleRegistration = (data: any) => {
     if (data.name) {
-      APIService.createNewTopic(data.name, props.clasId)
+      APIService.Topic.createDefault(props.clasId)
         .then((t) => {
-          let newValue: Topic[] = new Array<Topic>();
+          let newValue: ITopic[] = new Array<ITopic>();
           newValue.push(...props.topics);
           newValue.push(t);
           props.setTopics(newValue);
@@ -44,7 +44,7 @@ export function CreateTopicButton(props: CreateTopicButtonProps) {
   }
 
   useEffect(() => {
-    APIService.getTopicNamesOfClass("000000000000000000000000")
+    APIService.Topic.getTopicNamesOfClass("000000000000000000000000")
       .then(topics => setLibraryTopics(topics));
   }, []);
 

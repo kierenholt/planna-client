@@ -1,7 +1,12 @@
 import { Request } from "express";
-
+import objectId from "bson-objectid";
 
 export class Helpers {
+    static objectId: objectId =  objectId();
+
+    static renewObjectId(): void {
+        Helpers.objectId = objectId();
+    }
 
     static paramsToString(req: Request): string {
         let ret = "";

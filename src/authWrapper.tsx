@@ -2,9 +2,8 @@ import { createContext, useEffect, useState } from "react";
 import jwt_decode from "jwt-decode"
 import { JWT } from './accessToken';
 import { CredentialResponse, GoogleLogin, GoogleOAuthProvider } from "@react-oauth/google";
-import { APIService } from "./APIService";
-import { User } from "./interfaces";
-import { LoggedInUser } from "./user";
+import { LoggedInUser } from "./loggedInUser";
+import { APIService } from './APIService/APIService';
 
 interface AuthWrapperProps {
     children: React.ReactNode;
@@ -30,7 +29,7 @@ export function AuthWrapper(props: AuthWrapperProps) {
         let decoded: JWT | null = credentialResponse.credential ? jwt_decode(credentialResponse.credential) as JWT : null;
         if (decoded) {
             console.log(decoded);
-            await APIService.getOrCreateUser(decoded);
+            await APIService.User.getOrCreateUser(decoded);
             setAccessToken(decoded);
             localStorage.setItem(KEY_FOR_GOOGLE_ACCESS_TOKEN, JSON.stringify(decoded));
             setUser(new LoggedInUser(decoded));

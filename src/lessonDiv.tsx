@@ -1,7 +1,7 @@
 import { Stack, Typography } from "@mui/joy";
 import { useEffect, useState } from "react";
-import { Lesson } from "./interfaces";
-import { APIService } from "./APIService";
+import { ILesson } from "./interfaces";
+import { APIService } from './APIService/APIService';
 import { RowDiv } from "./row";
 
 interface LessonProps {
@@ -9,12 +9,12 @@ interface LessonProps {
 }
 
 export function LessonDiv(props: LessonProps) {
-    let [lesson, setLesson] = useState<Lesson | null>(null);
+    let [lesson, setLesson] = useState<ILesson | null>(null);
 
     useEffect(() => {
         if (props.lessonId) {
-            APIService.getLessonIncludingRows(props.lessonId)
-                .then((item: Lesson) => {
+            APIService.Lesson.getIncludingRows(props.lessonId)
+                .then((item: ILesson) => {
                     if (item) setLesson(item)
                 });
         }

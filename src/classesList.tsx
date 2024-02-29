@@ -1,21 +1,21 @@
 import { Button, DialogTitle, Sheet, Stack } from "@mui/joy";
-import { Clas } from "./interfaces";
+import { IClas } from "./interfaces";
 import { ClassCard } from "./ClassCard";
-import { APIService } from "./APIService";
 import { Helpers } from "./helpers";
+import { APIService } from "./APIService/APIService";
 
 interface ClassesListProps {
-    handleClick: (c: Clas) => void;
+    handleClick: (c: IClas) => void;
     children: React.ReactNode;
-    classes: Clas[];
-    setClasses: (classes: Clas[]) => void;
+    classes: IClas[];
+    setClasses: (classes: IClas[]) => void;
 }
 
 export function ClassesCardList(props: ClassesListProps) {
 
-    function deleteClass(c: Clas) {
+    function deleteClass(c: IClas) {
         if (c) {
-            APIService.deleteClass(c._id).then(
+            APIService.Clas.delete(c._id).then(
                 () => {
                     let newClasses = Helpers.arrayWithout(props.classes, c);
                     props.setClasses(newClasses);

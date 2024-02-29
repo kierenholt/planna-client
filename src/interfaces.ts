@@ -1,38 +1,38 @@
-export interface User {
+export interface IUser {
     _id: string; //GXXX for google
     name: string;
     email: string;
     picture?: string;
 }
 
-export interface Clas {
+export interface IClas {
     _id: string;
     name: string;
     settings: string;
-    owner: User;
+    owner: IUser;
 }
 
-export interface Topic {
+export interface ITopic {
     _id: string;
     name: string;
-    clas: Clas;
+    clas: IClas;
     isPublicShared: boolean;
 }
 
-export interface Task {
+export interface ITask {
     _id: string;
     name: string;
-    topic: Topic;
+    topic: ITopic;
 }
 
-export interface Lesson {
+export interface ILesson {
     _id: string;
     name: string;
-    topic: Topic;
-    rows: Row[];
+    topic: ITopic;
+    rows: IRow[];
 }
 
-export interface Row {
+export interface IRow {
     _id: string;
     comment: string;
     title: string;

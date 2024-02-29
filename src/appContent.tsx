@@ -1,27 +1,27 @@
 import { ClassesCardList } from './classesList';
-import { Clas } from './interfaces';
 import { AccountMenu } from './accountMenu';
 import { Button, Card, Stack } from '@mui/joy';
 
 import { CreateClassCard } from './createClassButton';
 import { useContext, useEffect, useState } from 'react';
-import { APIService } from './APIService';
 import { TopicContainer } from './TopicContainer';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import { UserContext } from './authWrapper';
+import { APIService } from './APIService/APIService';
+import { IClas } from './interfaces';
 
 
 export function AppContent() {
 
-    let [selectedClass, setSelectedClass] = useState<Clas | null>(null);
-    let [classes, setClasses] = useState<Clas[]>([]);
+    let [selectedClass, setSelectedClass] = useState<IClas | null>(null);
+    let [classes, setClasses] = useState<IClas[]>([]);
     
     let user = useContext(UserContext);
 
     useEffect(() => {
         if (user) {
-            APIService.getClassesOfUser(user._id)
-                .then((items: Clas[]) => {
+            APIService.Clas.getClassNamesOfUser(user._id)
+                .then((items: IClas[]) => {
                     if (items) setClasses(items)
                 });
         }

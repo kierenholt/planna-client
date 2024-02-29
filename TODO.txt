@@ -1,4 +1,8 @@
 TODO
+REMOVE CREATE DIALOGS AND JUST USE RENAME
+ORDERING OF CHILD ENTITIES
+ADDING ID TO PROJECTIONS
+
 option to pop out inspector?
 list lessons and tasks by date
 mathjax https://jsbin.com/?html,output

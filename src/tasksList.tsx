@@ -1,11 +1,11 @@
 import { List, ListItem, ListItemButton, Stack } from "@mui/joy";
-import { Lesson, Task } from "./interfaces";
+import { ILesson, ITask } from "./interfaces";
 
 interface LessonsAndTasksListProps {
-    setSelectedLessonOrTask: (l: Lesson | Task) => void;
-    selectedLessonOrTask: Lesson | Task | null;
-    lessons: Lesson[];
-    tasks: Task[];
+    setSelectedLessonOrTask: (l: ILesson | ITask) => void;
+    selectedLessonOrTask: ILesson | ITask | null;
+    lessons: ILesson[];
+    tasks: ITask[];
     children: React.ReactNode;
 }
 

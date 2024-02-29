@@ -1,16 +1,16 @@
 import { Add, Api, CheckBox } from "@mui/icons-material";
 import { Box, Button, ButtonGroup, FormHelperText, FormLabel, Input, Modal, Stack } from "@mui/joy";
 import { useEffect, useState } from "react";
-import { Lesson, Task } from "./interfaces";
-import { APIService } from "./APIService";
+import { ILesson, ITask } from "./interfaces";
+import { APIService } from './APIService/APIService';
 import { FieldErrors, FieldValues, useForm } from "react-hook-form";
 
 interface CreateLessonButtonProps {
   topicId: string;
-  setLessons: (Lessons: Lesson[]) => void;
-  Lessons: Lesson[];
-  setTasks: (Tasks: Task[]) => void;
-  Tasks: Task[];
+  setLessons: (Lessons: ILesson[]) => void;
+  Lessons: ILesson[];
+  setTasks: (Tasks: ITask[]) => void;
+  Tasks: ITask[];
 }
 
 enum createMode {
@@ -32,9 +32,9 @@ export function CreateLessonOrTaskButton(props: CreateLessonButtonProps) {
   const handleRegistration = (data: any) => {
     if (data.name) {
       if (createMode.lesson) {
-        APIService.createNewLesson(data.name, props.topicId)
+        APIService.Lesson.createDefault(props.topicId)
           .then((t) => {
-            let newValue: Lesson[] = new Array<Lesson>();
+            let newValue: ILesson[] = new Array<ILesson>();
             newValue.push(...props.Lessons);
             newValue.push(t);
             props.setLessons(newValue);
@@ -42,9 +42,9 @@ export function CreateLessonOrTaskButton(props: CreateLessonButtonProps) {
           })
       }
       if (createMode.task) {
-        APIService.createNewTask(data.name, props.topicId)
+        APIService.Task.create(data.name, props.topicId)
           .then((t) => {
-            let newValue: Task[] = new Array<Task>();
+            let newValue: ITask[] = new Array<ITask>();
             newValue.push(...props.Tasks);
             newValue.push(t);
             props.setTasks(newValue);

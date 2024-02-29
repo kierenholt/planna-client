@@ -1,13 +1,13 @@
 import { Box, Button, DialogTitle, List, ListItem, ListItemButton, Modal, Stack } from "@mui/joy"
-import { Clas, Topic } from "./interfaces";
+import { IClas, ITopic } from "./interfaces";
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
 import TopicIcon from '@mui/icons-material/Topic';
 
 interface TopicsListProps {
-    setSelectedTopic: (t: Topic) => void;
-    selectedTopic: Topic | null;
-    topics: Topic[];
+    setSelectedTopic: (t: ITopic) => void;
+    selectedTopic: ITopic | null;
+    topics: ITopic[];
 }
 
 export function TopicsList(props: TopicsListProps) {

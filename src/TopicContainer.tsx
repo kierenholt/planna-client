@@ -1,8 +1,8 @@
 import { Stack, Tab, TabList, TabPanel, Tabs } from "@mui/joy";
 import { CreateTopicButton } from "./createTopicButton";
 import { TopicsList } from "./topicsList";
-import { Clas, Topic } from "./interfaces";
-import { APIService } from "./APIService";
+import { IClas, ITopic } from "./interfaces";
+import { APIService } from './APIService/APIService';
 import { useEffect, useState } from "react";
 import { LessonsAndTasksContainer } from "./lessonsAndTasksContainer";
 
@@ -13,13 +13,13 @@ interface TopicContainerProps {
 
 export function TopicContainer(props: TopicContainerProps) {
 
-    let [selectedTopic, setSelectedTopic] = useState<Topic | null>(null);
-    let [topics, setTopics] = useState<Topic[]>([]);
+    let [selectedTopic, setSelectedTopic] = useState<ITopic | null>(null);
+    let [topics, setTopics] = useState<ITopic[]>([]);
 
     useEffect(() => {
         if (props.classId) {
-            APIService.getTopicNamesOfClass(props.classId)
-                .then((items: Topic[]) => {
+            APIService.Topic.getTopicNamesOfClass(props.classId)
+                .then((items: ITopic[]) => {
                     if (items) setTopics(items)
                 });
         }

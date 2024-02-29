@@ -1,8 +1,8 @@
 import { Stack } from "@mui/joy";
-import { Lesson, Task, Topic } from "./interfaces";
+import { ILesson, ITask, ITopic } from "./interfaces";
 import React, { useEffect, useState } from "react";
 import { LessonsAndTasksList } from "./lessonsAndTasksList";
-import { APIService } from "./APIService";
+import { APIService } from './APIService/APIService';
 import { CreateLessonOrTaskButton } from "./createLessonOrTaskButton";
 import { LessonDiv } from "./lessonDiv";
 import { TaskDiv } from "./taskDiv";
@@ -13,23 +13,23 @@ interface LessonsAndTasksContainerProps {
 
 export function LessonsAndTasksContainer(props: LessonsAndTasksContainerProps) {
 
-    let [selectedLessonOrTask, setSelectedLessonOrTask] = useState<Lesson | Task | null>(null);
-    let [lessons, setLessons] = useState<Lesson[]>([]);
-    let [tasks, setTasks] = useState<Task[]>([]);
+    let [selectedLessonOrTask, setSelectedLessonOrTask] = useState<ILesson | ITask | null>(null);
+    let [lessons, setLessons] = useState<ILesson[]>([]);
+    let [tasks, setTasks] = useState<ITask[]>([]);
     let [selectedType, setSelectedType] = useState<string>("");
 
     //GET LESSONS
     useEffect(() => {
-        APIService.getLessonNamesOfTopic(props.selectedTopicId)
-            .then((items: Lesson[]) => {
+        APIService.Lesson.getLessonNamesOfTopic(props.selectedTopicId)
+            .then((items: ILesson[]) => {
                 if (items) setLessons(items)
             });
     }, [props.selectedTopicId])
 
     //GET TASKS
     useEffect(() => {
-        APIService.getTaskNamesOfTopic(props.selectedTopicId)
-            .then((items: Task[]) => {
+        APIService.Task.getTaskNamesOfTopic(props.selectedTopicId)
+            .then((items: ITask[]) => {
                 if (items) setTasks(items)
             });
     }, [props.selectedTopicId])
@@ -52,7 +52,7 @@ export function LessonsAndTasksContainer(props: LessonsAndTasksContainerProps) {
                 {
                     selectedLessonOrTask ? 
                         (selectedType == "lesson" ? <LessonDiv 
-                            lessonId={(selectedLessonOrTask as Lesson)._id}
+                            lessonId={(selectedLessonOrTask as ILesson)._id}
                         /> :
                         selectedType == "task" ? <TaskDiv ></TaskDiv> : <></>)
                     : <></>
