@@ -7,7 +7,7 @@ export default class Clas {
     static async getClassNamesOfUser(userId: string): Promise<IClas[]> {
         try {
             return fetch(process.env.REACT_APP_API_DOMAIN + `/v1/classes/owner/${userId}/name`, {
-                method: 'get', mode: 'cors', headers: { 'Content-Type': 'application/json' },
+                method: 'GET', mode: 'cors', headers: { 'Content-Type': 'application/json' },
             })
             .then(response => response.json());
         }
@@ -20,7 +20,7 @@ export default class Clas {
     static async delete(classId: string): Promise<void> {
         try {
             return fetch(process.env.REACT_APP_API_DOMAIN + "/v1/classes/" + classId, {
-                method: 'delete', mode: 'cors', headers: { 'Content-Type': 'application/json' }
+                method: 'DELETE', mode: 'cors', headers: { 'Content-Type': 'application/json' }
             })
             .then(response => response.json());
         }
@@ -30,14 +30,11 @@ export default class Clas {
     }
 
     //3 rename class
-    static async rename(classId: string, name: string): Promise<void> {
+    static async rename(classId: string, newName: string): Promise<IClas> {
         try {
             return fetch(process.env.REACT_APP_API_DOMAIN + "/v1/classes/" + classId, {
-                method: 'put', mode: 'cors', headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(
-                    {
-                        name: name
-                    })
+                method: 'PATCH', mode: 'cors', headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({name: newName})
             })
             .then(response => response.json());
         }
@@ -49,8 +46,9 @@ export default class Clas {
     //4 create default class
     static async createDefault(ownerId: string): Promise<IClas> {
         try {
-            return fetch(process.env.REACT_APP_API_DOMAIN + "/v1/classes/owner/" + ownerId, {
-                method: 'post', mode: 'cors', headers: { 'Content-Type': 'application/json' }
+            return fetch(process.env.REACT_APP_API_DOMAIN + "/v1/classes", {
+                method: 'POST', mode: 'cors', headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ownerId: ownerId})
             })
             .then(response => {
                 Helpers.renewObjectId();

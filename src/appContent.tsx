@@ -1,22 +1,33 @@
-import { ClassesCardList } from './classesList';
+import { ClassesList } from './classesList';
 import { AccountMenu } from './accountMenu';
 import { Button, Card, Stack } from '@mui/joy';
 
-import { CreateClassCard } from './createClassButton';
 import { useContext, useEffect, useState } from 'react';
-import { TopicContainer } from './TopicContainer';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import { UserContext } from './authWrapper';
 import { APIService } from './APIService/APIService';
 import { IClas } from './interfaces';
+import { TopicList } from './topicList';
+import { CreateButton } from './createButton';
+import { Helpers } from './helpers';
+import { CreateCard } from './createCard';
 
 
 export function AppContent() {
 
     let [selectedClass, setSelectedClass] = useState<IClas | null>(null);
     let [classes, setClasses] = useState<IClas[]>([]);
-    
+
     let user = useContext(UserContext);
+
+    const createClassHandler = async() => {
+        if (user) {
+            let newClass = await APIService.Clas.createDefault(user._id)
+            let newClasses = Helpers.arrayWith(classes, newClass);
+            setClasses(newClasses);
+            setSelectedClass(newClass);
+        }
+    }
 
     useEffect(() => {
         if (user) {
@@ -29,13 +40,13 @@ export function AppContent() {
 
     return (<div>
         {/* TOP ROW */}
-        <Stack direction="row" spacing={1} 
+        <Stack direction="row" spacing={1}
             justifyContent='space-between' alignItems="center" padding={2}>
-            { selectedClass ? 
-            <Button onClick={() => setSelectedClass(null)}>
-                <ArrowBackIcon />
-                Back to classes
-            </Button> : <></> }
+            {selectedClass ?
+                <Button onClick={() => setSelectedClass(null)}>
+                    <ArrowBackIcon />
+                    Back to classes
+                </Button> : <></>}
             <Card >
                 {selectedClass?.name}
             </Card>
@@ -47,15 +58,15 @@ export function AppContent() {
         {selectedClass ?
             <div>
                 {/* TOPIC LIST CONTAINER */}
-                <TopicContainer classId={selectedClass._id} />
+                <TopicList classId={selectedClass._id} />
             </div>
 
-            : 
-            <ClassesCardList handleClick={setSelectedClass}
+            :
+            <ClassesList handleClick={setSelectedClass}
                 classes={classes} setClasses={setClasses}>
-                <CreateClassCard setClasses={setClasses}
-                    classes={classes} setSelectedClas={setSelectedClass} />
-            </ClassesCardList>
+
+                <CreateCard onClick={() => createClassHandler()} text='Add Class' />
+            </ClassesList>
         }
     </div>)
 }

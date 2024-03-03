@@ -2,65 +2,57 @@ import { Avatar, Button, Card, CardActions, CardContent, IconButton, Typography 
 import { IClas } from "./interfaces";
 import CardHeader from '@mui/material/CardHeader';
 import MoreVertIcon from '@mui/icons-material/MoreVert';
-import React from "react";
+import React, { useRef, useState } from "react";
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
 import { RenameModal } from "./renameModal";
+import { APIService } from "./APIService/APIService";
 
 interface ClassCardProps {
-  handleClick: (clas: IClas) => void;
+  handleOpen: (clas: IClas) => void;
   clas: IClas;
-  deleteClassHandler: () => void;
+  onDelete: () => void;
 }
 
 export function ClassCard(props: ClassCardProps) {
 
-  const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
-  const open = Boolean(anchorEl);
-  const handleClick = (event: React.MouseEvent<HTMLElement>) => {
-    setAnchorEl(event.currentTarget);
-  };
-  const handleClose = () => {
-    setAnchorEl(null);
-  };
+  const menuAnchor = useRef(null);
+  var [menuIsOpen, setMenuIsOpen] = useState(false);
+  var [renameModalIsOpen, setRenameModalIsOpen] = useState(false);
 
-  const renameHandler = () => {}
+  const renameHandler = async (name: string) => {
+    let renamed = await APIService.Clas.rename(props.clas._id, name);
+    setRenameModalIsOpen(false);
+    setMenuIsOpen(false);
+    props.clas.name = renamed.name;
+  }
 
   return (
-    <Card sx={{ width: 275, margin: "20px" }}>
+    <Card sx={{ width: 275, margin: "20px" }} key={props.clas._id}>
 
       <CardContent>
-        <CardHeader
-          avatar={
-            <Avatar aria-label="recipe">
-              R
-            </Avatar>
-          }
-          action={
-            <IconButton aria-label="settings"
-              onClick={handleClick}>
-              <MoreVertIcon />
-            </IconButton>
-          }
-          title={props.clas.name}
-          subheader="September 14, 2016">
-
+        <CardHeader action={
+          <IconButton aria-label="" onClick={() => setMenuIsOpen(!menuIsOpen)} ref={menuAnchor}>
+            <MoreVertIcon />
+          </IconButton>
+        }
+          title={props.clas.name}>
         </CardHeader>
       </CardContent>
       <CardActions>
-        <Button onClick={() => props.handleClick(props.clas)}>Open</Button>
+        <Button onClick={() => props.handleOpen(props.clas)}>Open</Button>
       </CardActions>
 
-      <Menu
-        anchorEl={anchorEl}
-        open={open}
-        onClose={handleClose} >
-        <MenuItem onClick={props.deleteClassHandler}>
+      <Menu anchorEl={menuAnchor.current} open={menuIsOpen} onClose={() => setMenuIsOpen(false)} >
+        <MenuItem onClick={props.onDelete}>
           Delete
         </MenuItem>
+        <MenuItem onClick={() => setRenameModalIsOpen(true)}>
+          Rename
+        </MenuItem>
       </Menu>
-      <RenameModal defaultText="" submitHandler={renameHandler} isOpen={false}/>
-      
+      <RenameModal placeholder={props.clas.name} onSubmit={renameHandler} isOpen={renameModalIsOpen} onCancel={() => setRenameModalIsOpen(false)} />
+
     </Card>
 
   )

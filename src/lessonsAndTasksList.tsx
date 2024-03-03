@@ -1,9 +1,8 @@
 import { List, ListItem, ListItemButton, Stack } from "@mui/joy";
 import { ILesson, ITask } from "./interfaces";
-import CoPresentIcon from '@mui/icons-material/CoPresent';
-import ListItemIcon from '@mui/material/ListItemIcon';
-import ListItemText from '@mui/material/ListItemText';
 import AssignmentIcon from '@mui/icons-material/Assignment';
+import LessonListItem from "./lessonListItem";
+import TaskListItem from "./taskListItem";
 
 interface LessonsAndTasksListProps {
     setSelectedLessonOrTask: (l: ILesson | ITask) => void;
@@ -12,6 +11,8 @@ interface LessonsAndTasksListProps {
     tasks: ITask[];
     children: React.ReactNode;
     setSelectedType: (s: string) => void;
+    onDeleteLesson: (l: ILesson) => void;
+    onDeleteTask: (t: ITask) => void;
 }
 
 export function LessonsAndTasksList(props: LessonsAndTasksListProps) {
@@ -20,38 +21,18 @@ export function LessonsAndTasksList(props: LessonsAndTasksListProps) {
             {props.children}
 
             <List>
-                {props.lessons.map(t =>
-                    <ListItem>
-                        <ListItemButton
-                            key={t._id}
-                            onClick={() => { 
-                                props.setSelectedLessonOrTask(t);
-                                props.setSelectedType("lesson");
-                            }}
-                            variant={props.selectedLessonOrTask == t ? 'solid' : 'outlined'}>
-                            <ListItemIcon>
-                              <CoPresentIcon />
-                            </ListItemIcon>
-                            <ListItemText primary={t.name} />
-                        </ListItemButton>
-                    </ListItem>)
+                {props.lessons.map(l => <LessonListItem lesson={l}
+                    onClick={() => {
+                        props.setSelectedLessonOrTask(l);
+                        props.setSelectedType("lesson");
+                    }} 
+                    isSelected={l == props.selectedLessonOrTask}
+                    onDelete={() => props.onDeleteLesson(l)} />)
                 }
 
-                {props.tasks.map(t =>
-                    <ListItem>
-                        <ListItemButton
-                            key={t._id}
-                            onClick={() => {
-                                props.setSelectedLessonOrTask(t);
-                                props.setSelectedType("task");
-                            }}
-                            variant={props.selectedLessonOrTask == t ? 'solid' : 'outlined'}>
-                            <ListItemIcon>
-                              <AssignmentIcon />
-                            </ListItemIcon>
-                            <ListItemText primary={t.name} />
-                        </ListItemButton>
-                    </ListItem>)
+                {props.tasks.map(t => <TaskListItem onClick={() => props.setSelectedLessonOrTask(t)} 
+                    task={t} isSelected={props.selectedLessonOrTask == t} 
+                    onDelete={() => props.onDeleteTask(t)} />)
                 }
             </List>
         </Stack>

@@ -192,12 +192,20 @@ export class Helpers {
       let index = Math.floor(Math.random() * arr.length);
       return arr[index];
     }
+    
+  
+    //adds instance to the end and returns new array
+    static arrayWith<T>(array: T[], item: T) {
+      let ret = [...array];
+      ret.push(item);
+      return ret;
+    }
   
     //removes all instances not just the first
-    static arrayWithout<T>(array: T[], item: T) {
+    static arrayWithout<T>(array: T[], item: T, predicate: (a: T,b: T) => boolean = (a,b) => a==b) {
       let ret = [];
       for (let i = 0; i < array.length; i++) {
-        if (array[i] != item) { ret.push(array[i]) }
+        if (!predicate(array[i],item)) { ret.push(array[i]) }
       }
       return ret;
     }

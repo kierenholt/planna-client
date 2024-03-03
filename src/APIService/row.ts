@@ -5,7 +5,7 @@ export default class Row {
     static async checkResponse(index: number, rowId: string, response: string, seed: number, userId: string): Promise<any> {
         try {
             return fetch(process.env.REACT_APP_API_DOMAIN + `/v1/responses`, {
-                method: 'post', mode: 'cors', headers: { 'Content-Type': 'application/json' },
+                method: 'POST', mode: 'cors', headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify(
                     {
                         index: index,

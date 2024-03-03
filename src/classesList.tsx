@@ -1,8 +1,10 @@
 import { Button, DialogTitle, Sheet, Stack } from "@mui/joy";
 import { IClas } from "./interfaces";
-import { ClassCard } from "./ClassCard";
 import { Helpers } from "./helpers";
 import { APIService } from "./APIService/APIService";
+import { ClassCard } from "./classCard";
+import { useContext } from "react";
+import { UserContext } from "./authWrapper";
 
 interface ClassesListProps {
     handleClick: (c: IClas) => void;
@@ -11,15 +13,15 @@ interface ClassesListProps {
     setClasses: (classes: IClas[]) => void;
 }
 
-export function ClassesCardList(props: ClassesListProps) {
-
-    function deleteClass(c: IClas) {
+export function ClassesList(props: ClassesListProps) {
+    
+    const deleteHandler = (c: IClas) => {
         if (c) {
             APIService.Clas.delete(c._id).then(
                 () => {
-                    let newClasses = Helpers.arrayWithout(props.classes, c);
+                    let newClasses = Helpers.arrayWithout(props.classes, c, (a,b) => a._id == b._id);
                     props.setClasses(newClasses);
-                }                
+                }
             );
         }
     }
@@ -28,16 +30,18 @@ export function ClassesCardList(props: ClassesListProps) {
         <div>
             <h1>Your classes</h1>
             <Sheet sx={{
-                display:"flex",
-                maxWidth:"1200px",
-                flexWrap:"wrap",
+                display: "flex",
+                maxWidth: "1200px",
+                flexWrap: "wrap",
             }}>
-            {props.classes.map(c => <ClassCard key={c._id} 
-                deleteClassHandler={() => deleteClass(c)}
-                handleClick={props.handleClick} 
-                clas={c} ></ClassCard>            )}
-            {props.children}
-        </Sheet>
+                {props.classes.map(c =>
+                    <ClassCard
+                        onDelete={() => deleteHandler(c)}
+                        handleOpen={props.handleClick}
+                        clas={c} />
+                )}
+                {props.children}
+            </Sheet>
 
         </div>
     )

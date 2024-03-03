@@ -1,26 +1,21 @@
-import { Box, Button, Card, FormHelperText, FormLabel, Input, Modal, Stack, Typography } from "@mui/joy";
+import { Box, Button, Card, DialogContent, FormHelperText, FormLabel, Input, Modal, Stack, TextField, Typography } from "@mui/joy";
 import { useState } from "react";
-import { FieldErrors, FieldValues, useForm } from "react-hook-form";
+import { FocusTrap } from '@mui/base/FocusTrap';
+import { FieldValues, useForm } from "react-hook-form";
 
 interface RenameModalProps {
-    submitHandler: (a: any) => void,
+    onSubmit: (name: string) => void,
+    onCancel: () => void,
     isOpen: boolean,
-    defaultText: string
+    placeholder: string
 }
 
 export function RenameModal(props: RenameModalProps) {
 
-    const { register, handleSubmit, formState: { errors } } = useForm();
-    const handleError = (errors: FieldErrors<FieldValues>) => { };
-
-    const handleClose = () => {props.isOpen = false};
-
-    const registerOptions = {
-        name: { required: "Name is required" }
-    };
+    const {register, handleSubmit, formState: { errors }, } = useForm();
 
     const style = {
-        position: 'absolute' as 'absolute',
+        position: 'absolute',
         top: '50%',
         left: '50%',
         transform: 'translate(-50%, -50%)',
@@ -31,33 +26,24 @@ export function RenameModal(props: RenameModalProps) {
     return (
         <Modal
             open={props.isOpen}
-            onClose={handleClose}
+            onClose={() => { }}
             aria-labelledby="modal-modal-title"
             aria-describedby="modal-modal-description"
         >
-            <Box sx={style}>
+            <DialogContent>
+                <Box sx={style}>
 
-                <form onSubmit={handleSubmit(props.submitHandler, handleError)}>
-                    <div>
-                        <FormLabel>
-                            Rename
-                        </FormLabel>
-                        <Input type="text" {...register('name', registerOptions.name)} value={props.defaultText}/>
-                        {errors?.name &&
-                        <FormHelperText>
-                            {errors.name.message?.toString()}
-                        </FormHelperText>}
-                    </div>
-                    <Stack direction={"row"}>
-                        <Button type="submit">
-                            Rename
-                        </Button>
-                        <Button onClick={handleClose}>
-                            Cancel
-                        </Button>
+                    <form onSubmit={handleSubmit(
+                        (data: FieldValues) => props.onSubmit(data.name)
+                    )}>
+                    <Input {...register('name', {value: props.placeholder})} autoFocus={true}/>
+                    <Stack direction="row">
+                        <Input type="submit" value={"Rename"}/>
+                        <Input type="button" onClick={props.onCancel} value={"Cancel"}/>
                     </Stack>
-                </form>
-            </Box>
-        </Modal>
+                    </form>
+                </Box>
+            </DialogContent>
+        </Modal >
     )
 }

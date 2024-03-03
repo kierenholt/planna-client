@@ -5,7 +5,7 @@ export default class User {
     static async getOrCreateUser(accessToken: JWT): Promise<void> {
         try {
             return fetch(process.env.REACT_APP_API_DOMAIN + "/v1/users", {
-                method: 'post', mode: 'cors', headers: { 'Content-Type': 'application/json' },
+                method: 'POST', mode: 'cors', headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
                     email: accessToken.email,
                     picture: accessToken.picture,
