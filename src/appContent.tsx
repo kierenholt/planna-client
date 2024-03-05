@@ -65,7 +65,7 @@ export function AppContent() {
             <ClassesList handleClick={setSelectedClass}
                 classes={classes} setClasses={setClasses}>
 
-                <CreateCard onClick={() => createClassHandler()} text='Add Class' />
+                <CreateCard onClick={() => createClassHandler()} text='Add Class' key='0'/>
             </ClassesList>
         }
     </div>)

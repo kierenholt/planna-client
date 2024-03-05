@@ -1,3 +1,5 @@
+import { IHasSequence } from "./sequence";
+
 export interface IUser {
     _id: string; //GXXX for google
     name: string;
@@ -12,11 +14,12 @@ export interface IClas {
     owner: IUser;
 }
 
-export interface ITopic {
+export interface ITopic extends IHasSequence {
     _id: string;
     name: string;
     clas: IClas;
     isPublicShared: boolean;
+    sequence: number;
 }
 
 export interface ITask {

@@ -16,7 +16,7 @@ interface TopicListItemProps {
     onDelete: () => void;
     onDrag?: () => void;
     onDragEnter?: () => void;
-    onDragEnd?: () => void;
+    onDrop?: () => void;
 }
 
 export function TopicListItem(props: TopicListItemProps) {
@@ -35,8 +35,8 @@ export function TopicListItem(props: TopicListItemProps) {
     return (
         <ListItem draggable onDragStart={props.onDrag} 
             onDragEnter={props.onDragEnter} 
-            onDragEnd={props.onDragEnd}
-            key={props.topic._id}
+            onDrop={props.onDrop}
+            onDragOver={(e) => e.preventDefault()}
             >
             <ListItemButton
                 onClick={props.onClick}

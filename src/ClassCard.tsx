@@ -28,7 +28,7 @@ export function ClassCard(props: ClassCardProps) {
   }
 
   return (
-    <Card sx={{ width: 275, margin: "20px" }} key={props.clas._id}>
+    <Card sx={{ width: 275, margin: "20px" }}>
 
       <CardContent>
         <CardHeader action={

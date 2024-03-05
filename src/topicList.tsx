@@ -6,6 +6,7 @@ import { LessonsAndTasksContainer } from "./lessonsAndTasksContainer";
 import { TopicListItem } from "./topicListItem";
 import { Helpers } from "./helpers";
 import { CreateButton } from "./createButton";
+import { IHasSequence, Sequence } from "./sequence";
 
 interface TopicListProps {
     classId: string;
@@ -23,7 +24,10 @@ export function TopicList(props: TopicListProps) {
         if (props.classId) {
             APIService.Topic.getTopicNamesOfClass(props.classId)
                 .then((items: ITopic[]) => {
-                    if (items) setTopics(items)
+                    if (items) {
+                        items.sort((a,b) => a.sequence - b.sequence);
+                        setTopics(items);
+                    }
                 });
         }
     }, [props.classId])
@@ -37,12 +41,12 @@ export function TopicList(props: TopicListProps) {
                 let topicsWithoutDrag = Helpers.arrayWithout(topics, dragTopic, (a,b) => a?._id  == b?._id) as ITopic[];
                 let dragOverIndex = topicsWithoutDrag.map(t => t?._id).indexOf(dragOverId);
 
-                if (ids.indexOf(dragId) > ids.indexOf(dragOverId)) {
+                if (ids.indexOf(dragId) > ids.indexOf(dragOverId)) { //insert before
                     newTopicsOrdered.push(...topicsWithoutDrag.slice(0,dragOverIndex));
                     newTopicsOrdered.push(dragTopic);
                     newTopicsOrdered.push(...topicsWithoutDrag.slice(dragOverIndex))
                 }
-                else {
+                else { //insert after
                     newTopicsOrdered.push(...topicsWithoutDrag.slice(0,dragOverIndex+1));
                     newTopicsOrdered.push(dragTopic);
                     newTopicsOrdered.push(...topicsWithoutDrag.slice(dragOverIndex+1))                    
@@ -51,6 +55,40 @@ export function TopicList(props: TopicListProps) {
             }
         }
     }, [dragId, dragOverId]);
+
+    const updateSequenceAPI = async (t: ITopic): Promise<number> => {
+        let updatedTopic = await APIService.Topic.updateSequence(t._id, t.sequence);
+        return updatedTopic.sequence;
+    }
+
+    const dropHandler = async () => {
+        if (dragId.length && dragOverId.length && dragId != dragOverId) {
+            let ids = topics.map(t => t._id);
+            let newTopicsOrdered: ITopic[] = [];
+            let dragTopic = topics.find(t => t._id == dragId) as ITopic;
+            let topicsWithoutDrag = Helpers.arrayWithout(topics, dragTopic, (a,b) => a?._id  == b?._id) as ITopic[];
+            let dragOverIndex = topicsWithoutDrag.map(t => t?._id).indexOf(dragOverId);
+
+            if (ids.indexOf(dragOverId) == 0) { //start
+                Sequence.insertAtBeginning(dragTopic, topicsWithoutDrag[0]);
+                updateSequenceAPI(dragTopic);
+            }
+            else if (ids.indexOf(dragOverId) == ids.length-1) { //end
+                Sequence.insertAtEnd(topicsWithoutDrag[topicsWithoutDrag.length-1],dragTopic);
+                updateSequenceAPI(dragTopic);
+            }
+            else if (ids.indexOf(dragId) > ids.indexOf(dragOverId)) { //insert before
+                Sequence.insertBetween(topicsWithoutDrag[dragOverIndex-1],dragTopic,topicsWithoutDrag[dragOverIndex]);
+                updateSequenceAPI(dragTopic);
+            }
+            else { //insert after
+                Sequence.insertBetween(topicsWithoutDrag[dragOverIndex],dragTopic,topicsWithoutDrag[dragOverIndex+1]);
+                updateSequenceAPI(dragTopic);
+            }
+        }
+        setDragId("");
+        setDragOverId("");
+    }
 
     return (
 
@@ -63,7 +101,8 @@ export function TopicList(props: TopicListProps) {
                         onDelete={() => {}}
                         onDrag={() => setDragId(t._id)}
                         onDragEnter={() => setDragOverId(t._id)}
-                        onDragEnd={() => {console.log("drag end"); setDragId("")}}
+                        onDrop={dropHandler}
+                        key={t._id}
                         />)}
                 </List>
             </Stack>

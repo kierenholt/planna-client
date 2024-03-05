@@ -38,7 +38,8 @@ export function ClassesList(props: ClassesListProps) {
                     <ClassCard
                         onDelete={() => deleteHandler(c)}
                         handleOpen={props.handleClick}
-                        clas={c} />
+                        clas={c}
+                        key={c._id} />
                 )}
                 {props.children}
             </Sheet>

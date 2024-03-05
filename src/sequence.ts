@@ -1,3 +1,4 @@
+import { Square } from "@mui/icons-material";
 
 export interface IHasSequence {
     sequence: number;
@@ -6,18 +7,15 @@ export interface IHasSequence {
 export class Sequence {
     static INITIAL_STEP: number = 1048576; 
 
-    static insertBetween(a: IHasSequence, b: IHasSequence, c: IHasSequence, setter: (item: IHasSequence) => void) {
-        b.sequence = 0.5*(a.sequence + b.sequence);
-        setter(b);
+    static async insertBetween(a: IHasSequence, b: IHasSequence, c: IHasSequence) {
+        b.sequence = 0.5*(a.sequence + c.sequence);
     }
 
-    static insertAtEnd(a:IHasSequence, b:IHasSequence, setter: (item: IHasSequence) => void) {
+    static async insertAtEnd(a:IHasSequence, b:IHasSequence) {
         b.sequence = a.sequence + this.INITIAL_STEP;
-        setter(b);
     }
 
-    static insertAtBeginning(a:IHasSequence, b:IHasSequence, setter: (item: IHasSequence) => void) {
+    static async insertAtBeginning(a:IHasSequence, b:IHasSequence) {
         a.sequence = b.sequence - this.INITIAL_STEP;
-        setter(a);
     }
 }

@@ -56,4 +56,21 @@ export default class Topic {
             throw("error in rename topic");
         }
     }
+
+    //5 update  topic sequence
+    static async updateSequence(topicId: string, newSequence: number): Promise<ITopic> {
+        try {
+            return fetch(process.env.REACT_APP_API_DOMAIN + "/v1/topics/" + topicId, {
+                body: JSON.stringify({sequence: newSequence}),
+                method: 'PATCH', mode: 'cors', headers: { 'Content-Type': 'application/json' }
+            })
+            .then(response => response.json());
+        }
+        catch {
+            throw("error in rename topic");
+        }
+    }
+
+    
+
 }
