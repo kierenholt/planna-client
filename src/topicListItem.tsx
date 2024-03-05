@@ -14,13 +14,17 @@ interface TopicListItemProps {
     onClick: () => void;
     isSelected: boolean;
     onDelete: () => void;
+    onDrag?: () => void;
+    onDragEnter?: () => void;
+    onDragEnd?: () => void;
 }
 
 export function TopicListItem(props: TopicListItemProps) {
     const menuAnchor = useRef(null);
     var [menuIsOpen, setMenuIsOpen] = useState(false);
     var [renameModalIsOpen, setRenameModalIsOpen] = useState(false);
-    
+    let [isDragging, setIsDragging] = useState(false);
+
     const renameHandler = async (name: string) => {
         let renamed = await APIService.Topic.rename(props.topic._id, name);
         setRenameModalIsOpen(false);
@@ -29,7 +33,11 @@ export function TopicListItem(props: TopicListItemProps) {
     }
 
     return (
-        <ListItem key={props.topic._id}>
+        <ListItem draggable onDragStart={props.onDrag} 
+            onDragEnter={props.onDragEnter} 
+            onDragEnd={props.onDragEnd}
+            key={props.topic._id}
+            >
             <ListItemButton
                 onClick={props.onClick}
                 variant={props.isSelected ? 'solid' : 'outlined'}>
