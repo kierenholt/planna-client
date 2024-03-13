@@ -27,12 +27,18 @@ export function LessonsAndTasksList(props: LessonsAndTasksListProps) {
                         props.setSelectedType("lesson");
                     }} 
                     isSelected={l == props.selectedLessonOrTask}
-                    onDelete={() => props.onDeleteLesson(l)} />)
+                    onDelete={() => props.onDeleteLesson(l)} 
+                    key = {l._id}
+                    />)
                 }
 
-                {props.tasks.map(t => <TaskListItem onClick={() => props.setSelectedLessonOrTask(t)} 
-                    task={t} isSelected={props.selectedLessonOrTask == t} 
-                    onDelete={() => props.onDeleteTask(t)} />)
+                {props.tasks.map(t => <TaskListItem 
+                    onClick={() => props.setSelectedLessonOrTask(t)} 
+                    task={t} 
+                    isSelected={props.selectedLessonOrTask == t} 
+                    onDelete={() => props.onDeleteTask(t)} 
+                    key = {t._id}
+                    />)
                 }
             </List>
         </Stack>

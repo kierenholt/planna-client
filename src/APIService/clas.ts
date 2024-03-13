@@ -17,7 +17,7 @@ export default class Clas {
     }
 
     //2 delete class
-    static async delete(classId: string): Promise<void> {
+    static async delete(classId: string): Promise<number> {
         try {
             return fetch(process.env.REACT_APP_API_DOMAIN + "/v1/classes/" + classId, {
                 method: 'DELETE', mode: 'cors', headers: { 'Content-Type': 'application/json' }

@@ -23,7 +23,6 @@ export function TopicListItem(props: TopicListItemProps) {
     const menuAnchor = useRef(null);
     var [menuIsOpen, setMenuIsOpen] = useState(false);
     var [renameModalIsOpen, setRenameModalIsOpen] = useState(false);
-    let [isDragging, setIsDragging] = useState(false);
 
     const renameHandler = async (name: string) => {
         let renamed = await APIService.Topic.rename(props.topic._id, name);

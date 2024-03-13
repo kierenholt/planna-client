@@ -3,9 +3,9 @@ import { ITopic } from "../interfaces";
 export default class Topic {
 
     //1 get topic names of class
-    static async getTopicNamesOfClass(classId: string): Promise<ITopic[]> {
+    static async getTopicsOfClass(classId: string): Promise<ITopic[]> {
         try { 
-            return fetch(process.env.REACT_APP_API_DOMAIN + `/v1/topics/class/${classId}/name`, {
+            return fetch(process.env.REACT_APP_API_DOMAIN + `/v1/topics/class/${classId}`, {
                 method: 'GET', mode: 'cors', headers: { 'Content-Type': 'application/json' },
             })
                 .then(response => response.json());
@@ -59,6 +59,7 @@ export default class Topic {
 
     //5 update  topic sequence
     static async updateSequence(topicId: string, newSequence: number): Promise<ITopic> {
+        console.log("update sequence");
         try {
             return fetch(process.env.REACT_APP_API_DOMAIN + "/v1/topics/" + topicId, {
                 body: JSON.stringify({sequence: newSequence}),

@@ -18,9 +18,12 @@ export function ClassesList(props: ClassesListProps) {
     const deleteHandler = (c: IClas) => {
         if (c) {
             APIService.Clas.delete(c._id).then(
-                () => {
-                    let newClasses = Helpers.arrayWithout(props.classes, c, (a,b) => a._id == b._id);
-                    props.setClasses(newClasses);
+                (deletedCount) => {
+                    console.log(deletedCount);
+                    if (deletedCount > 0) {
+                        let newClasses = Helpers.arrayWithout(props.classes, c, (a,b) => a._id == b._id);
+                        props.setClasses(newClasses);
+                    }
                 }
             );
         }
